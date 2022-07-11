@@ -1,0 +1,12 @@
+#
+# Build files
+#
+*.out
+*.exe
+
+
+#
+# Log and other kinds of files
+#
+*.log
+*.json
