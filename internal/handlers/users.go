@@ -19,7 +19,7 @@ func GetUser(c echo.Context) error {
 	user, err := dao.GetUser(ctx, c.Param("id"))
 	if err != nil {
 		c.Logger().Errorf(
-			"failed to find user (%s), reason %v",
+			"failed to fetch user (%s), reason %v",
 			c.Param("id"),
 			err,
 		)
@@ -37,8 +37,12 @@ func GetUsers(c echo.Context) error {
 
 	users, err := dao.GetUsers(ctx)
 	if err != nil {
-		c.Logger().Error("failed to find users, reason %v", err)
+		c.Logger().Error("failed to fetch users, reason %v", err)
 		return err
+	}
+
+	if len(users) == 0 {
+		return c.String(http.StatusNotFound, "")
 	}
 
 	return c.JSON(http.StatusOK, users)
