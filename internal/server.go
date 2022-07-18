@@ -6,6 +6,7 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"github.com/rafaelcn/meau/internal/config"
+	"github.com/rafaelcn/meau/internal/handlers"
 	"github.com/rafaelcn/meau/internal/middleware"
 )
 
@@ -20,11 +21,18 @@ func Serve() error {
 	e.Use(middleware.FirebaseAuthentication)
 
 	// HTTP handlers
-	e.GET("/animals", getAnimals)
-	e.GET("/animals/:id", getAnimal)
-	e.POST("/animals", insertAnimal)
+	e.GET("/pets", handlers.GetPet)
+	e.GET("/pets/:id", handlers.GetPets)
 
-	e.GET("/health", health)
+	e.POST("/pets", handlers.InsertPet)
+
+	e.GET("/users", handlers.GetUsers)
+	e.GET("/users/:id", handlers.GetUser)
+
+	e.POST("/users", handlers.InsertUser)
+
+	//
+	e.GET("/health", handlers.Health)
 
 	address := config.Hostname + ":" + config.Port
 
