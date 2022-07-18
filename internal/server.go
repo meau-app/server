@@ -21,8 +21,8 @@ func Serve() error {
 	e.Use(middleware.FirebaseAuthentication)
 
 	// HTTP handlers
-	e.GET("/pets", handlers.GetPet)
-	e.GET("/pets/:id", handlers.GetPets)
+	e.GET("/pets", handlers.GetPets)
+	e.GET("/pets/:id", handlers.GetPet)
 
 	e.POST("/pets", handlers.InsertPet)
 
