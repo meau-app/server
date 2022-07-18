@@ -4,8 +4,9 @@ import (
 	"context"
 
 	"github.com/labstack/echo"
-	"github.com/rafaelcn/meau/internal/config"
 	"google.golang.org/api/iterator"
+
+	"github.com/rafaelcn/meau/internal/config"
 )
 
 type User struct {
@@ -14,8 +15,8 @@ type User struct {
 	Phone        string `json:"phone"`
 	Address      string `json:"address"`
 	Age          int64  `json:"age"`
-	ProfileImage string /* a base 64 image*/
-	Pets         []Pet
+	ProfileImage string `json:"profile_image"` /* a base 64 image*/
+	Pets         []Pet  `json:"pets"`
 }
 
 func GetUser(ctx context.Context, id string) (User, error) {
@@ -30,7 +31,7 @@ func GetUser(ctx context.Context, id string) (User, error) {
 	}
 
 	user := User{}
-	doc.DataTo(user)
+	doc.DataTo(&user)
 
 	return user, nil
 }
@@ -67,7 +68,19 @@ func GetUsers(ctx context.Context) ([]User, error) {
 	return users, nil
 }
 
-func SaveUser(ctx context.Context, user User) error {
+func SaveUser(ctx context.Context, user *User) error {
+	client, err := config.Database.Firestore(ctx)
+	if err != nil {
+		return err
+	}
+
+	logger := ctx.Value(ContextLoggerKey).(echo.Logger)
+
+	_, err = client.Collection("users").Doc(user.Email).Set(ctx, user)
+	if err != nil {
+		logger.Errorf("failed to save a user, reason %v", err)
+		return err
+	}
 
 	return nil
 }
