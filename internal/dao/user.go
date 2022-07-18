@@ -1,0 +1,72 @@
+package dao
+
+import (
+	"context"
+
+	"github.com/labstack/echo"
+	"github.com/rafaelcn/meau/internal/config"
+	"google.golang.org/api/iterator"
+)
+
+type User struct {
+	Name         string `json:"name"`
+	Email        string `json:"email"`
+	Phone        string `json:"phone"`
+	Address      string `json:"address"`
+	Age          int64  `json:"age"`
+	ProfileImage string /* a base 64 image*/
+	Pets         []Pet
+}
+
+func GetUser(ctx context.Context, id string) (User, error) {
+	client, err := config.Database.Firestore(ctx)
+	if err != nil {
+		return User{}, err
+	}
+
+	doc, err := client.Collection("users").Doc(id).Get(ctx)
+	if err != nil {
+		return User{}, err
+	}
+
+	user := User{}
+	doc.DataTo(user)
+
+	return user, nil
+}
+
+func GetUsers(ctx context.Context) ([]User, error) {
+	users := []User{}
+
+	client, err := config.Database.Firestore(ctx)
+	if err != nil {
+		return users, err
+	}
+
+	logger := ctx.Value(ContextLoggerKey).(echo.Logger)
+
+	iter := client.Collection("users").Documents(ctx)
+
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		} else if err != nil {
+			return users, err
+		}
+
+		user := User{}
+
+		if err = doc.DataTo(&user); err != nil {
+			logger.Errorf("failed to convert datatype, reason %v", err)
+		}
+
+		users = append(users, user)
+	}
+
+	return users, nil
+}
+
+func SaveUser(ctx context.Context, user User) error {
+	return nil
+}
