@@ -2,22 +2,21 @@ package dao
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/labstack/echo/v4"
 	"github.com/rafaelcn/meau/internal/config"
 	"google.golang.org/api/iterator"
 )
 
 type Pet struct {
-	Name     string                 `json:"name,omitempty"`
-	Vaccines map[string]interface{} `json:"vaccines,omitempty"`
-	Age      int64
-	Race     string
-	Adopted  bool `json:"adopted"`
+	Name     string                 `json:"name"`
+	Vaccines map[string]interface{} `json:"vaccines"`
+	Age      int64                  `json:"age"`
+	Race     string                 `json:"race"`
+	Adopted  bool                   `json:"adopted"`
 }
 
 func GetPet(ctx context.Context, id string) (Pet, error) {
-
 	client, err := config.Database.Firestore(ctx)
 	if err != nil {
 		return Pet{}, err
@@ -42,16 +41,25 @@ func GetPets(ctx context.Context) ([]Pet, error) {
 		return pets, err
 	}
 
-	iter := client.Collection("pets").Where("adopted", "==", false).Documents(ctx)
+	logger := ctx.Value(ContextLoggerKey).(echo.Logger)
+
+	it := client.Collection("pets").Where("adopted", "==", false).Documents(ctx)
 
 	for {
-		doc, err := iter.Next()
+		doc, err := it.Next()
 		if err == iterator.Done {
 			break
 		} else if err != nil {
 			return pets, err
 		}
-		fmt.Println(doc.Data())
+
+		pet := Pet{}
+
+		if err = doc.DataTo(&pet); err != nil {
+			logger.Errorf("failed to convert document, reason %v", err)
+		}
+
+		pets = append(pets, pet)
 	}
 
 	return pets, nil

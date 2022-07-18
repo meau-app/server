@@ -45,10 +45,10 @@ func GetUsers(ctx context.Context) ([]User, error) {
 
 	logger := ctx.Value(ContextLoggerKey).(echo.Logger)
 
-	iter := client.Collection("users").Documents(ctx)
+	it := client.Collection("users").Documents(ctx)
 
 	for {
-		doc, err := iter.Next()
+		doc, err := it.Next()
 		if err == iterator.Done {
 			break
 		} else if err != nil {
@@ -58,7 +58,7 @@ func GetUsers(ctx context.Context) ([]User, error) {
 		user := User{}
 
 		if err = doc.DataTo(&user); err != nil {
-			logger.Errorf("failed to convert datatype, reason %v", err)
+			logger.Errorf("failed to convert document, reason %v", err)
 		}
 
 		users = append(users, user)
@@ -68,5 +68,6 @@ func GetUsers(ctx context.Context) ([]User, error) {
 }
 
 func SaveUser(ctx context.Context, user User) error {
+
 	return nil
 }
