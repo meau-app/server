@@ -15,8 +15,11 @@ type Pet struct {
 	Name     string                 `json:"name"`
 	Vaccines map[string]interface{} `json:"vaccines"`
 	Age      int64                  `json:"age"`
-	Race     string                 `json:"race"`
+	Species  string                 `json:"species"`
 	Adopted  bool                   `json:"adopted"`
+	Pictures []string               `json:"pictures"` /* base 64 images */
+	Diseases []string               `json:"diseases"`
+	Temper   string                 `json:"temper"`
 }
 
 func GetPet(ctx context.Context, id string) (Pet, error) {

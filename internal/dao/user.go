@@ -10,11 +10,15 @@ import (
 )
 
 type User struct {
-	Name         string `json:"name"`
-	Email        string `json:"email"`
-	Phone        string `json:"phone"`
-	Address      string `json:"address"`
-	Age          int64  `json:"age"`
+	Name      string `json:"name"`
+	Email     string `json:"email"`
+	Phone     string `json:"phone"`
+	City      string `json:"city"`
+	CityState string `json:"state"`
+	Address   string `json:"address"`
+	Age       int64  `json:"age"`
+	Gender    string ``
+
 	ProfileImage string `json:"profile_image"` /* a base 64 image*/
 	Pets         []Pet  `json:"pets"`
 }
