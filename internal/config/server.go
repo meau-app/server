@@ -6,6 +6,6 @@ var (
 )
 
 func InitEvironment() {
-	Hostname = GetEnvOrDefault("MEAU_HOSTNAME", "0.0.0.0")
+	Hostname = GetEnvOrDefault("MEAU_HOST", "0.0.0.0")
 	Port = GetEnvOrDefault("MEAU_PORT", "8080")
 }
