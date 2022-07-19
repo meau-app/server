@@ -7,7 +7,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/rafaelcn/meau/internal/dao"
+	"github.com/meau-app/server/internal/dao"
 )
 
 func GetUser(c echo.Context) error {

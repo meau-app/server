@@ -1,6 +1,6 @@
 package main
 
-import "github.com/rafaelcn/meau/internal"
+import "github.com/meau-app/server/internal"
 
 func main() {
 	internal.Serve()

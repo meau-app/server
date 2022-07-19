@@ -6,8 +6,9 @@ import (
 	"encoding/hex"
 
 	"github.com/labstack/echo/v4"
-	"github.com/rafaelcn/meau/internal/config"
 	"google.golang.org/api/iterator"
+
+	"github.com/meau-app/server/internal/config"
 )
 
 type Pet struct {

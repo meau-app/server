@@ -1,4 +1,4 @@
-module github.com/rafaelcn/meau
+module github.com/meau-app/server
 
 go 1.17
 

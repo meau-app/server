@@ -5,9 +5,9 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/rafaelcn/meau/internal/config"
-	"github.com/rafaelcn/meau/internal/handlers"
-	"github.com/rafaelcn/meau/internal/middleware"
+	"github.com/meau-app/server/internal/config"
+	"github.com/meau-app/server/internal/handlers"
+	"github.com/meau-app/server/internal/middleware"
 )
 
 func Serve() error {

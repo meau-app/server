@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo"
 	"google.golang.org/api/iterator"
 
-	"github.com/rafaelcn/meau/internal/config"
+	"github.com/meau-app/server/internal/config"
 )
 
 type User struct {

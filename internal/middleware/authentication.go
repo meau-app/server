@@ -6,7 +6,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/rafaelcn/meau/internal/config"
+	"github.com/meau-app/server/internal/config"
 )
 
 func FirebaseAuthentication(next echo.HandlerFunc) echo.HandlerFunc {
