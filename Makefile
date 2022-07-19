@@ -10,4 +10,4 @@ docker-build:
 	docker build -t meau-server .
 
 docker-run: docker-build
-	docker run -t meau-server
+	docker run --publish 8080:8080 meau-server

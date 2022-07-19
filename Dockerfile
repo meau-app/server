@@ -2,14 +2,15 @@ FROM golang:1.17-bullseye
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
+COPY go.mod        ./
+COPY go.sum        ./
+COPY firebase.json ./
 
 COPY cmd      ./cmd
 COPY internal ./internal
 
 ENV MEAU_HOST=0.0.0.0
-ENV MEAU_PORT=80
+ENV MEAU_PORT=8080
 
 ENV GO111MODULE=on
 
