@@ -12,7 +12,7 @@ import (
 func FirebaseAuthentication(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		ip := c.RealIP()
-		if ip == "::1" || ip == "127.0.0.1" {
+		if ip == "::1" || ip == "127.0.0.1" || config.Authenticate == "false" {
 			return next(c)
 		}
 

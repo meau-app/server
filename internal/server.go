@@ -31,7 +31,8 @@ func Serve() error {
 
 	e.POST("/users", handlers.InsertUser)
 
-	//
+	//  only for testing purposes, does not expose any information about the
+	//  server itself
 	e.GET("/health", handlers.Health)
 
 	address := config.Hostname + ":" + config.Port
