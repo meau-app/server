@@ -10,7 +10,8 @@ COPY cmd      ./cmd
 COPY internal ./internal
 
 ENV MEAU_HOST=0.0.0.0
-ENV MEAU_PORT=8080
+ENV MEAU_PORT=80
+ENV MEAU_AUTHENTICATE=false
 
 ENV GO111MODULE=on
 
