@@ -11,3 +11,9 @@ docker-build:
 
 docker-run: docker-build
 	docker run --publish 8080:8080 meau-server
+
+docker-tag:
+	docker tag meau-server gcr.io/unb-adote/meau-server
+
+docker-push: docker-build docker-tag
+	docker push gcr.io/unb-adote/meau-server
