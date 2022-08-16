@@ -1,10 +1,10 @@
 CC = go
 
 SRC = cmd/main.go
+EXE = meau.out
 
 all:
-	$(CC) build -o meau.out $(SRC)
-
+	$(CC) build -o $(EXE) $(SRC)
 
 docker-build:
 	docker build -t meau-server .
@@ -17,3 +17,6 @@ docker-tag:
 
 docker-push: docker-build docker-tag
 	docker push gcr.io/unb-adote/meau-server
+
+clean:
+	@rm $(EXE)
