@@ -85,7 +85,7 @@ func SavePet(ctx context.Context, pet *Pet) error {
 
 	_, err = client.Collection("pets").Doc(uuid).Set(ctx, pet)
 	if err != nil {
-		logger.Errorf("failed to save a user, reason %v", err)
+		logger.Errorf("failed to save a pet, reason %v", err)
 		return err
 	}
 
