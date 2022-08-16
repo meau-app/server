@@ -17,7 +17,7 @@ type User struct {
 	CityState string `json:"state"`
 	Address   string `json:"address"`
 	Age       int64  `json:"age"`
-	Gender    string ``
+	Gender    string `json:"gender"`
 
 	ProfileImage string `json:"profile_image"` /* a base 64 image*/
 	Pets         []Pet  `json:"pets"`
