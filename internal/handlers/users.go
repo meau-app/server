@@ -57,7 +57,7 @@ func InsertUser(c echo.Context) error {
 	user := &dao.User{}
 
 	if err := c.Bind(user); err != nil {
-		c.String(http.StatusBadRequest, "")
+		c.String(http.StatusBadRequest, "failed to parse request")
 	}
 
 	dao.SaveUser(ctx, user)

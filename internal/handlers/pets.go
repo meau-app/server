@@ -56,7 +56,7 @@ func InsertPet(c echo.Context) error {
 	pet := &dao.Pet{}
 
 	if err := c.Bind(pet); err != nil {
-		c.String(http.StatusBadRequest, "")
+		c.String(http.StatusBadRequest, "failed to parse request")
 	}
 
 	dao.SavePet(ctx, pet)
