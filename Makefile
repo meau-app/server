@@ -18,5 +18,10 @@ docker-tag:
 docker-push: docker-build docker-tag
 	docker push gcr.io/unb-adote/meau-server
 
+docker-push-ad:
+	docker build -t meau-server-authentication-disabled .
+	docker tag meau-server-authentication-disabled gcr.io/unb-adote/meau-server-authentication-disabled
+	docker push gcr.io/unb-adote/meau-server-authentication-disabled
+
 clean:
 	@rm $(EXE)
