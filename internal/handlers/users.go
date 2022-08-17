@@ -40,10 +40,25 @@ func GetUsers(c echo.Context) error {
 
 	ctx = context.WithValue(ctx, dao.ContextLoggerKey, c.Logger())
 
-	users, err := dao.GetUsers(ctx)
-	if err != nil {
-		c.Logger().Error("failed to fetch users, reason %v", err)
-		return err
+	users := UserCache.GetAll()
+
+	// cache miss behaviour
+	if len(users) == 0 {
+		var err error
+
+		users, err = dao.GetUsers(ctx)
+		if err != nil {
+			c.Logger().Error("failed to fetch users, reason %v", err)
+			return err
+		}
+
+		err = UserCache.Save(users...)
+		if err != nil {
+			c.Logger().Warn(
+				"failed to save user items to cache, reason %v",
+				err,
+			)
+		}
 	}
 
 	if len(users) == 0 {
