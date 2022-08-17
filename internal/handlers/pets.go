@@ -20,7 +20,7 @@ func GetPet(c echo.Context) error {
 
 	ctx = context.WithValue(ctx, dao.ContextLoggerKey, c.Logger())
 
-	user, err := dao.GetPet(ctx, c.Param("id"))
+	pet, err := dao.GetPet(ctx, c.Param("id"))
 	if err != nil {
 		c.Logger().Errorf(
 			"failed to fetch pet (%s), reason %v",
@@ -30,7 +30,7 @@ func GetPet(c echo.Context) error {
 		return err
 	}
 
-	return c.JSON(http.StatusOK, user)
+	return c.JSON(http.StatusOK, pet)
 }
 
 func GetPets(c echo.Context) error {
@@ -79,4 +79,13 @@ func InsertPet(c echo.Context) error {
 	dao.SavePet(ctx, pet)
 
 	return c.String(http.StatusCreated, "")
+}
+
+func DeletePet(c echo.Context) error {
+	ctx, cancel := context.WithTimeout(c.Request().Context(), 1*time.Minute)
+	defer cancel()
+
+	ctx = context.WithValue(ctx, dao.ContextLoggerKey, c.Logger())
+
+	return dao.DeletePet(ctx, c.Param("id"))
 }

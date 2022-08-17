@@ -84,3 +84,12 @@ func InsertUser(c echo.Context) error {
 
 	return c.String(http.StatusCreated, "")
 }
+
+func DeleteUser(c echo.Context) error {
+	ctx, cancel := context.WithTimeout(c.Request().Context(), 1*time.Minute)
+	defer cancel()
+
+	ctx = context.WithValue(ctx, dao.ContextLoggerKey, c.Logger())
+
+	return dao.DeleteUser(ctx, c.Param("id"))
+}

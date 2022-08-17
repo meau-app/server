@@ -91,3 +91,20 @@ func SavePet(ctx context.Context, pet *Pet) error {
 
 	return nil
 }
+
+func DeletePet(ctx context.Context, id string) error {
+	client, err := config.Database.Firestore(ctx)
+	if err != nil {
+		return err
+	}
+
+	logger := ctx.Value(ContextLoggerKey).(echo.Logger)
+
+	_, err = client.Collection("pets").Doc(id).Delete(ctx)
+	if err != nil {
+		logger.Errorf("failed to delete pet with id %s, reason %v", id, err)
+		return err
+	}
+
+	return nil
+}

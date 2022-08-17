@@ -28,10 +28,12 @@ func Serve() error {
 	e.GET("/pets", handlers.GetPets)
 	e.GET("/pets/:id", handlers.GetPet)
 	e.POST("/pets", handlers.InsertPet)
+	e.DELETE("/pets/:id", handlers.DeletePet)
 
 	e.GET("/users", handlers.GetUsers)
 	e.GET("/users/:id", handlers.GetUser)
 	e.POST("/users", handlers.InsertUser)
+	e.DELETE("/users/:id", handlers.DeleteUser)
 
 	//  only for testing purposes, does not expose any information about the
 	//  server itself

@@ -18,6 +18,7 @@ type User struct {
 	Address   string `json:"address"`
 	Age       int64  `json:"age"`
 	Gender    string `json:"gender"`
+	Username  string `json:"username"`
 
 	ProfileImage string `json:"profile_image"` /* a base 64 image*/
 	Pets         []Pet  `json:"pets"`
@@ -83,6 +84,23 @@ func SaveUser(ctx context.Context, user *User) error {
 	_, err = client.Collection("users").Doc(user.Email).Set(ctx, user)
 	if err != nil {
 		logger.Errorf("failed to save a user, reason %v", err)
+		return err
+	}
+
+	return nil
+}
+
+func DeleteUser(ctx context.Context, id string) error {
+	client, err := config.Database.Firestore(ctx)
+	if err != nil {
+		return err
+	}
+
+	logger := ctx.Value(ContextLoggerKey).(echo.Logger)
+
+	_, err = client.Collection("users").Doc(id).Delete(ctx)
+	if err != nil {
+		logger.Errorf("failed to delete user with id %s, reason %v", id, err)
 		return err
 	}
 
