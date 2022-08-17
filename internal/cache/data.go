@@ -3,10 +3,13 @@ package cache
 import (
 	"sync"
 	"time"
+
+	"github.com/labstack/echo/v4"
 )
 
 type CacheConfig struct {
-	TTL time.Duration // duration of persisted data per item
+	TTL    time.Duration // duration of persisted data per item
+	Logger echo.Logger
 }
 
 type Cache[T CacheItemType] struct {
@@ -69,13 +72,15 @@ func (c *Cache[T]) expireElements() {
 	for {
 		c.m.Lock()
 		if len(c.items) > 0 {
+			filtered := []CacheItem[T]{}
 
-			for i, item := range c.items {
-				if item.created.Add(c.config.TTL).Before(time.Now()) {
-					c.items = append(c.items[:i], c.items[i+1:]...)
+			for _, item := range c.items {
+				if item.created.Add(c.config.TTL).After(time.Now()) {
+					filtered = append(filtered, item)
 				}
 			}
 
+			c.items = filtered
 		}
 		c.m.Unlock()
 

@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	m "github.com/labstack/echo/v4/middleware"
 
 	"github.com/meau-app/server/internal/cache"
 	"github.com/meau-app/server/internal/config"
@@ -20,17 +21,16 @@ func Serve() error {
 	config.InitEvironment()
 	config.InitDatabase(e.Logger)
 
+	e.Use(m.Logger())
 	e.Use(middleware.FirebaseAuthentication)
 
 	// HTTP handlers
 	e.GET("/pets", handlers.GetPets)
 	e.GET("/pets/:id", handlers.GetPet)
-
 	e.POST("/pets", handlers.InsertPet)
 
 	e.GET("/users", handlers.GetUsers)
 	e.GET("/users/:id", handlers.GetUser)
-
 	e.POST("/users", handlers.InsertUser)
 
 	//  only for testing purposes, does not expose any information about the
@@ -38,11 +38,15 @@ func Serve() error {
 	e.GET("/health", handlers.Health)
 
 	// initializing caches
-	handlers.UserCache = cache.NewCache[dao.User](cache.TypeUser, cache.CacheConfig{
-		TTL: 3 * time.Minute,
-	})
+	handlers.UserCache = cache.NewCache[dao.User](
+		cache.TypeUser,
+		cache.CacheConfig{
+			TTL: 3 * time.Minute,
+			Logger: e.Logger,
+		},
+	)
 	handlers.PetCache = cache.NewCache[dao.Pet](cache.TypePet, cache.CacheConfig{
-		TTL: 3 * time.Minute,
+		TTL: 2 * time.Minute,
 	})
 
 	address := config.Hostname + ":" + config.Port
