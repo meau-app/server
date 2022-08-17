@@ -27,7 +27,8 @@ func NewCache[T CacheItemType](t CacheType, o CacheConfig) *Cache[T] {
 		items:  []CacheItem[T]{},
 	}
 
-	c.expireElements()
+	// initialize cache cleaner based on items TTL
+	go c.expireElements()
 
 	return c
 }
@@ -65,17 +66,19 @@ func (c *Cache[T]) GetAll() []T {
 }
 
 func (c *Cache[T]) expireElements() {
-	c.m.Lock()
-	if len(c.items) > 0 {
+	for {
+		c.m.Lock()
+		if len(c.items) > 0 {
 
-		for i, item := range c.items {
-			if item.created.Add(c.config.TTL).Before(time.Now()) {
-				c.items = append(c.items[:i], c.items[i+1:]...)
+			for i, item := range c.items {
+				if item.created.Add(c.config.TTL).Before(time.Now()) {
+					c.items = append(c.items[:i], c.items[i+1:]...)
+				}
 			}
+
 		}
+		c.m.Unlock()
 
+		time.Sleep(500 * time.Millisecond)
 	}
-	c.m.Unlock()
-
-	time.Sleep(500 * time.Millisecond)
 }
