@@ -51,6 +51,12 @@ func GetPets(c echo.Context) error {
 			c.Logger().Error("failed to fetch pets, reason %v", err)
 			return err
 		}
+
+		err = PetCache.Save(pets...)
+
+		if err != nil {
+			c.Logger().Warn("failed to save pet items to cache, reason %v", err)
+		}
 	}
 
 	if len(pets) == 0 {
