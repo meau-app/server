@@ -7,7 +7,12 @@ import (
 
 	"github.com/labstack/echo/v4"
 
+	"github.com/meau-app/server/internal/cache"
 	"github.com/meau-app/server/internal/dao"
+)
+
+var (
+	UserCache *cache.Cache[dao.User]
 )
 
 func GetUser(c echo.Context) error {

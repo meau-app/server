@@ -6,7 +6,12 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
+	"github.com/meau-app/server/internal/cache"
 	"github.com/meau-app/server/internal/dao"
+)
+
+var (
+	PetCache  *cache.Cache[dao.Pet]
 )
 
 func GetPet(c echo.Context) error {
@@ -34,10 +39,18 @@ func GetPets(c echo.Context) error {
 
 	ctx = context.WithValue(ctx, dao.ContextLoggerKey, c.Logger())
 
-	pets, err := dao.GetPets(ctx)
-	if err != nil {
-		c.Logger().Error("failed to fetch pets, reason %v", err)
-		return err
+	pets := PetCache.GetAll()
+
+	// cache miss behaviour
+	if len(pets) == 0 {
+		var err error
+
+		pets, err = dao.GetPets(ctx)
+
+		if err != nil {
+			c.Logger().Error("failed to fetch pets, reason %v", err)
+			return err
+		}
 	}
 
 	if len(pets) == 0 {
