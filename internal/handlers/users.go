@@ -77,10 +77,12 @@ func InsertUser(c echo.Context) error {
 	user := &dao.User{}
 
 	if err := c.Bind(user); err != nil {
-		c.String(http.StatusBadRequest, "failed to parse request")
+		return c.String(http.StatusBadRequest, "failed to parse request")
 	}
 
-	dao.SaveUser(ctx, user)
+	if err := dao.SaveUser(ctx, user); err != nil {
+		return c.String(http.StatusInternalServerError, "failed to save user")
+	}
 
 	return c.String(http.StatusCreated, "")
 }

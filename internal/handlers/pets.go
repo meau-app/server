@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	PetCache  *cache.Cache[dao.Pet]
+	PetCache *cache.Cache[dao.Pet]
 )
 
 func GetPet(c echo.Context) error {
@@ -73,10 +73,12 @@ func InsertPet(c echo.Context) error {
 	pet := &dao.Pet{}
 
 	if err := c.Bind(pet); err != nil {
-		c.String(http.StatusBadRequest, "failed to parse request")
+		return c.String(http.StatusBadRequest, "failed to parse request")
 	}
 
-	dao.SavePet(ctx, pet)
+	if err := dao.SavePet(ctx, pet); err != nil {
+		return c.String(http.StatusInternalServerError, "failed to save pet")
+	}
 
 	return c.String(http.StatusCreated, "")
 }
