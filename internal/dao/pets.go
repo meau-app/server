@@ -12,10 +12,11 @@ import (
 )
 
 type Pet struct {
+	ID       string                 `json:"id"`
 	Name     string                 `json:"name"`
 	Vaccines map[string]interface{} `json:"vaccines"`
 	Age      int64                  `json:"age"`
-	Species  string                 `json:"species"`
+	Race     string                 `json:"race"`
 	Adopted  bool                   `json:"adopted"`
 	Pictures []string               `json:"pictures"` /* base 64 images */
 	Diseases []string               `json:"diseases"`
@@ -65,6 +66,9 @@ func GetPets(ctx context.Context) ([]Pet, error) {
 		if err = doc.DataTo(&pet); err != nil {
 			logger.Errorf("failed to convert document, reason %v", err)
 		}
+
+		// adding necessary information on the pet structure
+		pet.ID = doc.Ref.ID
 
 		pets = append(pets, pet)
 	}
