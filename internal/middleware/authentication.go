@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -29,7 +30,7 @@ func FirebaseAuthentication(next echo.HandlerFunc) echo.HandlerFunc {
 			return err
 		}
 
-		uid := c.FormValue("token")
+		uid := strings.Split(c.Request().Header.Get("Authorization"), " ")[1]
 
 		_, err = client.VerifyIDTokenAndCheckRevoked(ctx, uid)
 
