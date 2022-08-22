@@ -20,8 +20,8 @@ type User struct {
 	Gender    string `json:"gender"`
 	Username  string `json:"username"`
 
-	ProfileImage string `json:"profile_image"` /* a base 64 image*/
-	Pets         []Pet  `json:"pets"`
+	ProfileImage string   `json:"profile_image"` /* a base 64 image*/
+	Pets         []string `json:"pets"`          /* collection of pet ids */
 }
 
 func GetUser(ctx context.Context, id string) (User, error) {
