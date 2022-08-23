@@ -6,6 +6,9 @@ EXE = meau.out
 all:
 	$(CC) build -o $(EXE) $(SRC)
 
+debug:
+	$(CC) build -gcflags="all=-N -l" -o $(EXE) $(SRC)
+
 docker-build:
 	docker build -t meau-server .
 
