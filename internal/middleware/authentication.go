@@ -30,9 +30,9 @@ func FirebaseAuthentication(next echo.HandlerFunc) echo.HandlerFunc {
 			return err
 		}
 
-		uid := strings.Split(c.Request().Header.Get("Authorization"), " ")[1]
+		token := strings.Split(c.Request().Header.Get("Authorization"), " ")[1]
 
-		_, err = client.VerifyIDTokenAndCheckRevoked(ctx, uid)
+		_, err = client.VerifyIDToken(ctx, token)
 
 		if err != nil {
 			c.Logger().Errorf("token not valid, reason %v", err)
