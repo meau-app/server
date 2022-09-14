@@ -29,13 +29,20 @@ func GetPet(ctx context.Context, id string) (Pet, error) {
 		return Pet{}, err
 	}
 
+	logger := ctx.Value(ContextLoggerKey).(echo.Logger)
+
 	doc, err := client.Collection("pets").Doc(id).Get(ctx)
 	if err != nil {
+
 		return Pet{}, err
 	}
 
 	pet := Pet{}
-	doc.DataTo(&pet)
+	pet.ID = doc.Ref.ID
+
+	if err = doc.DataTo(&pet); err != nil {
+		logger.Errorf("failed to convert a single document, reason %v", err)
+	}
 
 	return pet, nil
 }
@@ -62,13 +69,11 @@ func GetPets(ctx context.Context) ([]Pet, error) {
 		}
 
 		pet := Pet{}
+		pet.ID = doc.Ref.ID
 
 		if err = doc.DataTo(&pet); err != nil {
 			logger.Errorf("failed to convert document, reason %v", err)
 		}
-
-		// adding necessary information on the pet structure
-		pet.ID = doc.Ref.ID
 
 		pets = append(pets, pet)
 	}
