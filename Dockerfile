@@ -9,10 +9,12 @@ COPY firebase.json ./
 COPY cmd      ./cmd
 COPY internal ./internal
 
+ARG MEAU_VERSION
+
 ENV MEAU_HOST=0.0.0.0
 ENV MEAU_PORT=80
 ENV MEAU_AUTHENTICATE=false
-ARG MEAU_VERSION
+ENV MEAU_BUILD=${MEAU_VERSION:-unknown}
 
 ENV GO111MODULE=on
 
