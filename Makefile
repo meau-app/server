@@ -2,6 +2,7 @@ CC = go
 
 SRC = cmd/main.go
 EXE = meau.out
+VER = $(shell git rev-parse HEAD)
 
 all:
 	$(CC) build -o $(EXE) $(SRC)
@@ -10,7 +11,7 @@ debug:
 	$(CC) build -gcflags="all=-N -l" -o $(EXE) $(SRC)
 
 docker-build:
-	docker build -t meau-server .
+	docker build --build-arg MEAU_VERSION=$(VER) -t meau-server .
 
 docker-run: docker-build
 	docker run --publish 8080:8080 meau-server
