@@ -43,13 +43,16 @@ func Serve() error {
 	handlers.UserCache = cache.NewCache[dao.User](
 		cache.TypeUser,
 		cache.CacheConfig{
-			TTL: 3 * time.Minute,
+			TTL:    1 * time.Minute,
 			Logger: e.Logger,
 		},
 	)
-	handlers.PetCache = cache.NewCache[dao.Pet](cache.TypePet, cache.CacheConfig{
-		TTL: 2 * time.Minute,
-	})
+	handlers.PetCache = cache.NewCache[dao.Pet](
+		cache.TypePet,
+		cache.CacheConfig{
+			TTL: 40 * time.Second,
+		},
+	)
 
 	address := config.Hostname + ":" + config.Port
 
