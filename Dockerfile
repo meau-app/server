@@ -16,6 +16,8 @@ ENV MEAU_PORT=80
 ENV MEAU_AUTHENTICATE=false
 ENV MEAU_BUILD=${MEAU_VERSION:-unknown}
 
+RUN echo "Build version: ${MEAU_BUILD}"
+
 ENV GO111MODULE=on
 
 RUN go clean -modcache
